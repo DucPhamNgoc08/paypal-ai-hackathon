@@ -1,5 +1,7 @@
 # PayPal AI Hackathon 2026
 
+[![CI](https://github.com/DucPhamNgoc08/paypal-ai-hackathon/actions/workflows/ci.yml/badge.svg)](https://github.com/DucPhamNgoc08/paypal-ai-hackathon/actions/workflows/ci.yml)
+
 Work-in-progress entry for the [PayPal AI Hackathon](https://paypalaihackathon.devpost.com/) (Oct–Nov 2026).
 
 The product idea is not public yet. This repository currently holds the foundation: a Next.js app with the PayPal sandbox and an AI model wired in end to end, tests, and CI.
@@ -45,6 +47,9 @@ tests/                        unit tests (no network)
 scripts/check-sandbox.mjs     verifies real PayPal sandbox + AI credentials
 docs/                         architecture and design notes
 SUBMIT.md                     Devpost submission kit and checklist
+.github/workflows/ci.yml      CI: lint, typecheck, tests and build on every push
+.husky/                       git hooks: lint on commit, typecheck + tests on push
+AGENTS.md, CLAUDE.md          workflow and rules for contributors and AI coding agents
 ```
 
 ## Getting started
@@ -75,6 +80,10 @@ Open http://localhost:3000.
 | `npm run typecheck` | TypeScript check |
 | `npm run lint` | ESLint |
 | `npm run check:sandbox` | Calls the real PayPal sandbox and AI provider with the keys in `.env.local` and prints a sandbox approval link |
+
+## Development workflow
+
+Every change goes through a short-lived branch and a pull request into `main`, with Conventional Commit messages and squash merges. Git hooks lint each commit and run typecheck and tests before each push; CI repeats the full check on GitHub. The full rules, written for both humans and AI coding agents, are in [AGENTS.md](AGENTS.md).
 
 ## Security and scope
 
