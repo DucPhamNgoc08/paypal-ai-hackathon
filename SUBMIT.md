@@ -66,6 +66,18 @@ Requirements from the official rules:
 - [ ] Tools section names every AI model/service and how it is used
 - [ ] Everything in English
 
+README sections to add back once the idea is chosen:
+
+- [ ] Project name and one-line pitch as the title
+- [ ] Demo: hosted URL and YouTube link
+- [ ] The problem, and why existing tools (including PayPal's own) don't solve it
+- [ ] What it does: the core flow, step by step
+- [ ] Test accounts for judges (sandbox buyer email/password)
+- [ ] Verified on the PayPal sandbox: date and what was tested
+- [ ] Sponsor tools used, and which sponsor prize each targets
+- [ ] AI tools used to build this (coding assistants etc.)
+- [ ] What's next
+
 Extra checks:
 
 - [ ] `npm run check:sandbox` passes with real credentials

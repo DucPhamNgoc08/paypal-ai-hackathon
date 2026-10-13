@@ -1,37 +1,27 @@
-# Project Name
+# PayPal AI Hackathon 2026
 
-> One-line pitch: what this does and who it is for.
+Work-in-progress entry for the [PayPal AI Hackathon](https://paypalaihackathon.devpost.com/) (Oct–Nov 2026).
 
-Built for the [PayPal AI Hackathon](https://paypalaihackathon.devpost.com/) (Oct–Nov 2026).
+The product idea is not public yet. This repository currently holds the foundation: a Next.js app with the PayPal sandbox and an AI model wired in end to end, tests, and CI.
 
-## Demo
+## What works today
 
-- **Hosted demo:** _link here_
-- **Demo video (< 3 min):** _YouTube link here_
-
-## The problem
-
-Who has this problem, and why existing tools don't solve it well.
-
-## Why not existing tools
-
-What PayPal's built-in features or other products already do, and what this adds.
-
-## What it does
-
-Core flow, step by step, from the user's point of view.
+- **PayPal checkout (sandbox):** create an order, send the buyer to PayPal to approve it, capture the payment on return.
+- **AI chat endpoint:** sends a prompt to any OpenAI-compatible chat completions API and returns the reply.
+- **Runs without keys:** each integration falls back to mock mode when its credentials are missing, shown by a yellow badge on the home page.
 
 ## How PayPal is used
 
 | PayPal product / API | Where it is used | Why |
 | --- | --- | --- |
+| OAuth 2.0 client credentials | `src/lib/paypal.ts` | Server-side access token |
 | Orders API v2 (sandbox) | `src/lib/paypal.ts` | Create and capture payments |
 
 ## How AI is used
 
 | Model / AI service | Where it is used | Why |
 | --- | --- | --- |
-| _model name_ | `src/lib/ai.ts` | _..._ |
+| Any OpenAI-compatible model, set by `AI_MODEL` | `src/lib/ai.ts`, `src/app/api/ai/route.ts` | Chat completions behind a server-side route |
 
 ## Architecture
 
@@ -68,16 +58,14 @@ SUBMIT.md                     Devpost submission kit and checklist
 ### Run it
 
 ```bash
-git clone https://github.com/<your-username>/<repo-name>.git
-cd <repo-name>
+git clone https://github.com/DucPhamNgoc08/paypal-ai-hackathon.git
+cd paypal-ai-hackathon
 npm install
 cp .env.example .env.local   # optional, fill in keys
 npm run dev
 ```
 
 Open http://localhost:3000.
-
-**No keys? It still runs.** Any integration without credentials falls back to mock mode, shown by a yellow badge on the page. Add keys to `.env.local` to switch to the real PayPal sandbox and a real model.
 
 ### Useful commands
 
@@ -88,16 +76,6 @@ Open http://localhost:3000.
 | `npm run lint` | ESLint |
 | `npm run check:sandbox` | Calls the real PayPal sandbox and AI provider with the keys in `.env.local` and prints a sandbox approval link |
 
-### Test accounts for judges
-
-| Role | Sandbox email | Password |
-| --- | --- | --- |
-| Buyer | _..._ | _..._ |
-
-## Verified on the PayPal sandbox
-
-_Date and what was tested end to end._
-
 ## Security and scope
 
 - Runs against the **PayPal sandbox only**. No real money moves.
@@ -106,18 +84,6 @@ _Date and what was tested end to end._
 - Captures send a `PayPal-Request-Id` derived from the order id, so retrying a capture does not charge twice.
 - API routes validate input (amount range, currency code, prompt length) and apply a per-IP rate limit, so a public demo cannot be used to burn the AI key. The limit is in-memory, so on serverless hosts it is best-effort.
 - Error responses do not echo upstream error bodies; details go to the server log.
-
-## Sponsor tools used
-
-_None yet._
-
-## AI tools used to build this
-
-_e.g. coding assistants used during development._
-
-## What's next
-
-_What you would build with more time._
 
 ## License
 
