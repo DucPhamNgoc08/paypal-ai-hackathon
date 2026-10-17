@@ -45,6 +45,7 @@ src/
     rate-limit.ts             per-IP rate limiting for public API routes
 tests/                        unit tests (no network)
 scripts/check-sandbox.mjs     verifies real PayPal sandbox + AI credentials
+scripts/check-payouts.mjs     sends a test Payouts batch on the sandbox
 docs/                         architecture and design notes
 SUBMIT.md                     Devpost submission kit and checklist
 .github/workflows/ci.yml      CI: lint, typecheck, tests and build on every push
@@ -80,6 +81,7 @@ Open http://localhost:3000.
 | `npm run typecheck` | TypeScript check |
 | `npm run lint` | ESLint |
 | `npm run check:sandbox` | Calls the real PayPal sandbox and AI provider with the keys in `.env.local` and prints a sandbox approval link |
+| `npm run check:payouts -- --email <sandbox email>` | Sends a $1.00 sandbox Payouts batch and waits for its status. See [docs/payouts-spike.md](docs/payouts-spike.md) |
 
 ## Development workflow
 

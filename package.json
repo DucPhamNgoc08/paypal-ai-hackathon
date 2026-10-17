@@ -11,6 +11,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "check:sandbox": "node --env-file-if-exists=.env.local scripts/check-sandbox.mjs",
+    "check:payouts": "node --env-file-if-exists=.env.local scripts/check-payouts.mjs",
     "prepare": "husky"
   },
   "dependencies": {
