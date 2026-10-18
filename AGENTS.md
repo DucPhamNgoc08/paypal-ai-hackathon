@@ -36,6 +36,7 @@ The repo is public and judges read it. All code, comments, commits, PRs and docs
 | `npm test` | Unit tests, never touch the network |
 | `npm run build` | Production build |
 | `npm run check:sandbox` | Hits the real PayPal sandbox and AI provider using `.env.local` |
+| `npm run check:payouts -- --email <addr>` | Sends a test Payouts batch on the sandbox using `.env.local` |
 
 ## Git workflow (GitHub Flow)
 
