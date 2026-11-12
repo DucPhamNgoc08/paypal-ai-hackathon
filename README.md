@@ -1,15 +1,43 @@
-# Early Relief
+<div align="center">
 
-[![CI](https://github.com/paypal-ai-hackathon1/paypal-ai-hackathon/actions/workflows/ci.yml/badge.svg)](https://github.com/paypal-ai-hackathon1/paypal-ai-hackathon/actions/workflows/ci.yml)
+<img src="docs/images/cover.jpg" alt="Early Relief: AI reads, code decides, a person approves, PayPal pays" width="720">
+
+# Early Relief
 
 **Get cash to families before the flood, not after it.**
 
+<p>
+  <a href="https://github.com/paypal-ai-hackathon1/paypal-ai-hackathon/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/paypal-ai-hackathon1/paypal-ai-hackathon/actions/workflows/ci.yml/badge.svg"></a>
+  <a href="https://early-relief.onrender.com"><img alt="Hosted on Render" src="https://img.shields.io/badge/Hosted-Render-46E3B7?logo=render&logoColor=white"></a>
+  <a href="https://developer.paypal.com/docs/payouts/"><img alt="PayPal Payouts sandbox" src="https://img.shields.io/badge/PayPal-Payouts%20sandbox-003087?logo=paypal&logoColor=white"></a>
+  <a href="#how-ai-is-used"><img alt="AI Meta muse-spark-1.3" src="https://img.shields.io/badge/AI-Meta%20muse--spark--1.3-0467DF?logo=meta&logoColor=white"></a>
+  <a href="https://nextjs.org/"><img alt="Next.js 16" src="https://img.shields.io/badge/Next.js-16-000000?logo=nextdotjs&logoColor=white"></a>
+  <a href="LICENSE"><img alt="License MIT" src="https://img.shields.io/badge/License-MIT-blue"></a>
+</p>
+
+<a href="https://early-relief.onrender.com"><b>Live demo</b></a> · <a href="https://youtu.be/uHITj_zxDDo"><b>Demo video</b></a> · <a href="https://devpost.com/software/early-relief"><b>Devpost</b></a> · <a href="docs/architecture.md"><b>Architecture</b></a>
+
+</div>
+
 Early Relief is anticipatory flood cash for Vietnam. A weather forecast crosses a rule that was locked before the season, AI reads the official Vietnamese warning bulletins and quotes its sources, a person reviews and approves the plan once, and **PayPal Payouts** sends the money to local partner organisations, who hand it to registered households before the water arrives.
 
-Entry for the [PayPal AI Hackathon 2026](https://paypalaihackathon.devpost.com/).
+- **Live demo:** [early-relief.onrender.com](https://early-relief.onrender.com) (free instance: the first visit after a quiet period can take up to a minute to wake up)
+- **Demo video:** [youtu.be/uHITj_zxDDo](https://youtu.be/uHITj_zxDDo)
+- **Hackathon event:** [PayPal AI Hackathon 2026](https://paypalaihackathon.devpost.com/)
+- **Hackathon submission:** [Early Relief on Devpost](https://devpost.com/software/early-relief)
+- **Architecture:** [docs/architecture.md](docs/architecture.md)
 
-- **Hosted demo:** https://early-relief.onrender.com (free instance: the first visit after a quiet period can take up to a minute to wake up)
-- **Video (under 3 min):** https://youtu.be/uHITj_zxDDo
+### See it run
+
+<p align="center"><img src="docs/images/demo.gif" alt="Replay, AI reading the bulletin, and a PayPal sandbox payout reaching every partner" width="880"></p>
+
+### Screenshots
+
+| Replay: code checks each forecast against the locked rule | AI reads the bulletin, every value quoted and checked by code |
+| --- | --- |
+| ![Typhoon Yagi replay with province bars crossing the threshold](docs/images/replay.jpg) | ![AI readings beside the Vietnamese bulletin, each with a verified quote](docs/images/ai-reading.jpg) |
+| **Code flags shared phones and addresses; only a person excludes** | **One approval, one PayPal sandbox batch, each partner Received** |
+| ![Household list with review flags and Exclude buttons](docs/images/households.jpg) | ![Approved plan with PayPal batch ID and three partners Received](docs/images/paid.jpg) |
 
 The demo replays **Typhoon Yagi** (September 2024, northern Vietnam) with simulated forecasts, bulletins, partners and households. Everything runs on the **PayPal sandbox**; no real money moves.
 
