@@ -21,7 +21,8 @@ import type {
   PublicHousehold,
   PublicPartner,
 } from "./domain";
-import { centsToAmount, createPayoutBatch, type PayoutBatch } from "./paypal";
+import { centsToAmount, createPayoutBatch, getPayoutBatch, type PayoutBatch } from "./paypal";
+import { mergeItemStatus, planStatusFor } from "./payout-status";
 import { calculatePlanItems, evaluateRule, planTotalCents, UnlockedRuleError } from "./rules";
 import { getStore, newId, toPublicHousehold, type StoreState } from "./store";
 
@@ -292,4 +293,61 @@ async function sendPayout(planId: string): Promise<Plan> {
     return { ...item, payoutItemId: sent?.payoutItemId ?? null, payoutStatus: sent?.status ?? "PENDING" };
   });
   return savePlan(store, { ...current, status, items, payoutBatchId: batch.batchId });
+}
+
+// Shared across route module copies. Each plan has its own queue; unrelated plans stay independent.
+const REFRESH_KEY = Symbol.for("paypal-ai-hackathon.plan-status-refreshes");
+const refreshHolder = globalThis as typeof globalThis & { [REFRESH_KEY]?: Map<string, Promise<Plan>> };
+
+/**
+ * Serialize reads and writes for each plan so an older response cannot overwrite a newer one.
+ * A forced webhook refresh gets its own read after any in-flight poll, including one that marks
+ * the plan paid. Joining that poll would miss a refund that arrived while its response was pending.
+ */
+export function refreshPayoutStatus(planId: string, { force = false }: { force?: boolean } = {}): Promise<Plan> {
+  const state = getStore();
+  const queue = (refreshHolder[REFRESH_KEY] ??= new Map());
+  const previous = queue.get(planId) ?? Promise.resolve();
+  // Failure still reaches its original caller; the next request can retry independently.
+  const read = previous.catch(() => {}).then(() => {
+    if (getStore() !== state) throw new PlanError(409, "The demo was reset while its payout status read was queued.");
+    return readPayoutStatus(planId, force);
+  });
+  queue.set(planId, read);
+  return read.finally(() => {
+    if (queue.get(planId) === read) queue.delete(planId);
+  });
+}
+
+/** Polling stops reading paid plans; verified webhooks may read them for a later refund. */
+async function readPayoutStatus(planId: string, force: boolean): Promise<Plan> {
+  const plan = findPlan(getStore(), planId);
+  const batchId = plan.payoutBatchId;
+  if (!batchId || (plan.status === "paid" && !force)) return plan;
+
+  let batch: PayoutBatch;
+  try {
+    batch = await getPayoutBatch(batchId);
+  } catch (error) {
+    console.error(error);
+    const current = getStore().plans.find((p) => p.id === planId);
+    if (!current) throw new PlanError(409, "The demo was reset while its payout status was being read.");
+    throw new PlanError(502, "PayPal payout status is unavailable. Try again shortly.", current);
+  }
+
+  const store = getStore();
+  const current = store.plans.find((p) => p.id === planId);
+  if (!current || current.payoutBatchId !== batchId) {
+    throw new PlanError(409, "The demo changed while its payout status was being read.");
+  }
+  if (batch.batchId !== batchId || batch.senderBatchId !== planId) {
+    console.error(`Payout batch identity mismatch for plan ${planId}`);
+    throw new PlanError(502, "PayPal returned a payout batch that does not match this plan.", current);
+  }
+  const items = current.items.map((item) => {
+    const incoming = batch.items.find((entry) => entry.senderItemId === item.partnerId);
+    if (!incoming) return item;
+    return { ...item, payoutItemId: incoming.payoutItemId, payoutStatus: mergeItemStatus(item.payoutStatus, incoming.status) };
+  });
+  return savePlan(store, { ...current, items, status: planStatusFor(items, batch.status) });
 }
